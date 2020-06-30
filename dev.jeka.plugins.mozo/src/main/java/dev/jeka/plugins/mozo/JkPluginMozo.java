@@ -8,6 +8,7 @@ import dev.jeka.core.tool.builtins.java.JkPluginJava;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.List;
 
 public class JkPluginMozo extends JkPlugin {
@@ -28,9 +29,11 @@ public class JkPluginMozo extends JkPlugin {
 
     private JkDependencySet fetchMozoDependencies() {
         // TODO
+        // May be better to use directly Mozo Java API rather than cli.
         JkJavaProject otherModule = JkJavaProject.of().setBaseDir(Paths.get("../otherModule"));
+        List<Path> moduleDeps = new LinkedList<>(); // fulfill this list using Mozo
         return JkDependencySet.of()
-                .andFile("./location/on/local/file/system")
+                .andFiles(moduleDeps)
                 .and(otherModule.toDependency());
     }
 }
