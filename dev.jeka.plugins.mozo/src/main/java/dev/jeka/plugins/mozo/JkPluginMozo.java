@@ -7,6 +7,7 @@ import dev.jeka.core.tool.JkPlugin;
 import dev.jeka.core.tool.builtins.java.JkPluginJava;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class JkPluginMozo extends JkPlugin {
@@ -19,15 +20,17 @@ public class JkPluginMozo extends JkPlugin {
     protected void activate() {
         JkPluginJava java = this.getCommandSet().getPlugin(JkPluginJava.class);
         JkJavaProject javaProject = java.getProject();
-        JkDependencySet mozoDependencies = JkDependencySet.of().andFiles(fetchMozoDependenciesAsFiles());
         javaProject
             .getJarProduction()
                 .getDependencyManagement()
-                    .addDependencies(mozoDependencies);
+                    .addDependencies(fetchMozoDependencies());
     }
 
-    private List<Path> fetchMozoDependenciesAsFiles() {
+    private JkDependencySet fetchMozoDependencies() {
         // TODO
-        throw new IllegalStateException("Not implemented");
+        JkJavaProject otherModule = JkJavaProject.of().setBaseDir(Paths.get("../otherModule"));
+        return JkDependencySet.of()
+                .andFile("./location/on/local/file/system")
+                .and(otherModule.toDependency());
     }
 }
