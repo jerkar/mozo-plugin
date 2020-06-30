@@ -1,4 +1,5 @@
 import dev.jeka.core.api.depmanagement.JkDependencySet;
+import dev.jeka.core.api.java.JkJavaProcess;
 import dev.jeka.core.api.java.JkJavaVersion;
 import dev.jeka.core.api.java.testing.JkTestProcessor;
 import dev.jeka.core.api.java.testing.JkTestSelection;
@@ -26,26 +27,15 @@ class Build extends JkCommandSet {
                         .and("com.google.guava:guava:21.0")
                         .and("org.junit.jupiter:junit-jupiter:5.6.2", TEST)).__
                 .getCompilation()
-                    .setJavaVersion(JkJavaVersion.V8).__
-                .getTesting()
-                    .getTestSelection()
-                        .addIncludeStandardPatterns()
-                        .addIncludePatterns(JkTestSelection.IT_INCLUDE_PATTERN).__
-                    .getTestProcessor()
-                        .setForkingProcess(true)
-                        .getEngineBehavior()
-                            .setProgressDisplayer(JkTestProcessor.JkProgressOutputStyle.TREE).__.__.__.__
-
-            // Publication is only necessary if your project is being deployed on a binary repository.
-            // Many projects as jee war jar, springboot application, tools, Graphical application
-            // does not need this section at all.  In this case you can remove this section.
-            .getPublication()
-                .setModuleId("your.group:your.project")
-                .setVersion(JkGitWrapper.of(getBaseDir()).getVersionFromTags());  // Version inferred from Git
+                    .setJavaVersion(JkJavaVersion.V8);
     }
 
     public void cleanPack() {
         clean(); java.pack();
+    }
+
+    public void mozoFindModules() {
+        Mozo.findModules("com.google.guava");
     }
 
     public static void main(String[] args) {
